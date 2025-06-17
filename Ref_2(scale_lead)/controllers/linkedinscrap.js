@@ -159,20 +159,8 @@ fs.writeFileSync(linkedinstart, JSON.stringify(startEntries, null, 2));
 
 
 
-     browser = await puppeteer.connect({
-      browserWSEndpoint: BROWSER_WS,
-     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+   
 
-
-  
-    // browser = await puppeteer.launch({
-    //   headless:false,
-    //   slowMo:50,
-    //   defaultViewport: null,
-    //   args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      
-    // });
 
     const page = await browser.newPage();
 
@@ -232,45 +220,9 @@ await simulateHumanBehavior(page);
 
       await page.waitForSelector('ul[role="list"] > li', { timeout: 25000 });
      
-      const scrapedProfiles = await page.evaluate(() => {
-        const results = [];
-        const cards = document.querySelectorAll('ul[role="list"] > li');
-        cards.forEach((card) => {
-         card.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
-});
 
-        cards.forEach((card) => {
-          const getText = (selector, root = card) =>
-            root.querySelector(selector)?.innerText.trim() || "";
-          const mb1Divs = card.querySelectorAll(".mb1 > div");
-          const count = mb1Divs.length;
-          const Education = mb1Divs[count - 2]?.innerText?.trim() || "";
-          const location = mb1Divs[count - 1]?.innerText?.trim() || "";
-          const name = getText('span[aria-hidden="true"]');
-          const headline = Education;
-          const mutual = getText(".entity-result__insights");
-          const profileLink = card.querySelector('a[href*="/in/"]')?.href?.split("?")[0] || "";
 
-          results.push({ name, headline, location, Education, mutualConnections: mutual, profileUrl: profileLink });
-        });
-        return results.slice(0, 25);
-      });
 
-      scrapedProfiles.forEach((profile) => {
-        if (profile.name && profile.profileUrl) {
-          leads.push({
-            name: profile.name,
-            url: profile.profileUrl,
-            headline: profile.headline,
-            location: profile.location,
-            connectedAt: new Date().toISOString(),
-            connectionRequest: true,
-            firstMessageSent: false,
-            replied: false,
-            token:usertoken
-          });
-        }
-      });
 
       await simulateHumanBehavior(page);
       // 🚀 Try to connect with people

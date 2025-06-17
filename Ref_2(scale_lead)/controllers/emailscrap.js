@@ -10,7 +10,7 @@ import { simpleParser } from "mailparser";
 import { parentPort, isMainThread } from "worker_threads";
 import qs from "qs";
 import { fileURLToPath } from "url";
-const API_KEY = process.env.API_KEY || "RCteoxSZ4-myK2B-qu1aWg"; // Use .env in production
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const tokensFile = path.join(__dirname, "tokens.json");
